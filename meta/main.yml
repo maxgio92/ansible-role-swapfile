@@ -1,0 +1,13 @@
+---
+
+galaxy_info:
+  role_name: swapfile
+  author: maxgio92
+  description: Ansible role to manage swapfile on Linux
+  license: MIT
+  min_ansible_version: 2.7.0
+  galaxy_tags:
+    - os
+    - linux
+    - swap
+dependencies: []
