@@ -1,0 +1,11 @@
+---
+
+configure: yes
+debug: no
+min_disk_free_space: 0.25
+skip_pre_checks: no # Calculate and configure swap without checking if a swap is already configured (method: swapon -s)
+swap_file_path: /swapfile
+swap_file_size_mb: 4096
+swap_file_create_command: "dd if=/dev/zero of={{ swap_file_path }} bs=1M count={{ swap_file_size_mb|int }}"
+swap_swappiness: 60
+swap_test_mode: false

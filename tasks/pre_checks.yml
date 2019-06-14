@@ -1,0 +1,14 @@
+---
+
+- name: Check if swap is already configured
+  command: swapon -s
+  become: yes
+  register: swapon_show
+
+- set_fact:
+    swap_is_configured: "{{ (swapon_show.stdout == '') | ternary(false, true) }}"
+
+- debug: msg="Swap is to configure"
+  when:
+    - not swap_is_configured
+    - debug

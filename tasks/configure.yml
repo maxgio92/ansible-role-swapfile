@@ -1,0 +1,62 @@
+---
+
+# -------------------------------------------------
+# Create the file
+# -------------------------------------------------
+
+- name: Ensure swap file exists
+  command: >
+    {{ swap_file_create_command }}
+    creates='{{ swap_file_path }}'
+  register: swap_file_create
+  become: yes
+
+- name: Set permissions on swap file
+  file:
+    path: "{{ swap_file_path }}"
+    owner: root
+    group: root
+    mode: 0600
+  become: yes
+
+# -------------------------------------------------
+# Format the file
+# -------------------------------------------------
+
+- name: Make swap file if necessary
+  command: mkswap {{ swap_file_path }}
+  become: yes
+  when: swap_file_create is changed
+  register: mkswap_result
+
+# -------------------------------------------------
+# Enable the swap
+# -------------------------------------------------
+
+- name: Run swapon on the swap file
+  command: swapon {{ swap_file_path }}
+  become: yes
+  when:
+    - mkswap_result is changed
+
+- name: Manage swap file entry in fstab
+  mount:
+    name: none
+    src: "{{ swap_file_path }}"
+    fstype: swap
+    opts: sw
+    passno: 0
+    dump: 0
+    state: present
+  become: yes
+
+# -------------------------------------------------
+# Configure swappiness
+# -------------------------------------------------
+
+- name: Set swappiness
+  sysctl:
+    name: vm.swappiness
+    value: "{{ swap_swappiness }}"
+    state: present
+  become: yes

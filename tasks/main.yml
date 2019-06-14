@@ -1,0 +1,20 @@
+---
+
+# Preliminary checks
+- include_tasks: pre_checks.yml
+  when:
+    - not skip_pre_checks
+
+# Find a correct size for the swap file
+- include_tasks: set_swap_size.yml
+  when:
+    - (not swap_is_configured or
+      swap_is_configured is not defined)
+
+# Configure the swap
+- include_tasks: configure.yml
+  when:
+    - configure
+    - (not swap_is_configured or
+      swap_is_configured is not defined)
+

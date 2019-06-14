@@ -1,0 +1,10 @@
+---
+
+- name: --- DEBUG --- Swap size tuning
+  block:
+  - debug:
+      msg: "mount.size_available: {{ (mount.size_available/1024/1024)|int }}"
+  - debug:
+      msg: "swap_file_size: {{ swap_file_size_mb|int }}"
+  - debug:
+      var: (mount.size_available - (swap_file_size_mb|int)*1024*1024) / mount.size_total

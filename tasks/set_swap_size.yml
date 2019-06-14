@@ -1,0 +1,56 @@
+---
+
+# -----------------------------------------------------------------------------
+# Find a correct size for the swap file with step checks.
+# The device will have to keep more than {{min_disk_free_space}} of free space. 
+# -----------------------------------------------------------------------------
+
+- name: Set mount of device 
+  set_fact:
+    mount: "{{ ansible_mounts | selectattr('mount', 'equalto', (swap_file_path | dirname)) | list | first }}"
+
+# Step 1
+- name: debug
+  include_tasks: debug.yml
+  when: debug
+- name: Swap size tuning step 1
+  set_fact:
+    swap_file_size_mb: "{{ (swap_file_size_mb|int) / 2 }}"
+  when: ((mount.size_available - (swap_file_size_mb|int)*1024*1024) / mount.size_total) <= (min_disk_free_space|float)
+
+# Step 2
+- name: debug
+  include_tasks: debug.yml
+  when: debug
+- name: Swap size tuning step 2
+  set_fact:
+    swap_file_size_mb: "{{ (swap_file_size_mb|int) / 2 }}"
+  when: ((mount.size_available - (swap_file_size_mb|int)*1024*1024) / mount.size_total) <= (min_disk_free_space|float)
+
+# Step 3
+- name: debug
+  include_tasks: debug.yml
+  when: debug
+- name: Swap size tuning step 3
+  set_fact:
+    swap_file_size_mb: "{{ (swap_file_size_mb|int) / 2 }}"
+  when: ((mount.size_available - (swap_file_size_mb|int)*1024*1024) / mount.size_total) <= (min_disk_free_space|float)
+
+# Step 4
+- name: debug
+  include_tasks: debug.yml
+  when: debug
+- name: Swap size tuning step 4
+  set_fact:
+    swap_file_size_mb: "{{ (swap_file_size_mb|int) / 2 }}"
+  when: ((mount.size_available - (swap_file_size_mb|int)*1024*1024) / mount.size_total) <= (min_disk_free_space|float)
+
+# Fail
+- fail:
+    msg: "There's not enough free space on device to create swafile of {{ swap_file_size_mb|int }} MB"
+  when: ((mount.size_available - (swap_file_size_mb|int)*1024*1024) / mount.size_total) <= (min_disk_free_space|float)
+
+# Success
+- debug:
+    msg: "I'm going to configure {{ swap_file_size_mb|int }} MB of swap"
+  when: debug
