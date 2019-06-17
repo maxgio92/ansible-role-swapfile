@@ -23,4 +23,4 @@ Ansible role to manage swapfile on Linux.
 | skip\_pre\_checks | Set to true if you don't want to check if a swap is already configured | bool | no | no |
 | swap\_file\_path | The path of the swapfile | string | '/swapfile' | no |
 | swap\_file\_size\_mb | The size of the swapfile in MB | int | 4096 | no |
-| swap\_swappiness | The value of the swappiness to configure | int | 60 | no |
+| swappiness | The value of the swappiness to configure | int | 60 | no |
