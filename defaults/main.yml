@@ -7,4 +7,4 @@ skip_pre_checks: no # Calculate and configure swap without checking if a swap is
 swap_file_path: /swapfile
 swap_file_size_mb: 4096
 swap_file_create_command: "dd if=/dev/zero of={{ swap_file_path }} bs=1M count={{ swap_file_size_mb|int }}"
-swap_swappiness: 60
+swappiness: 60
