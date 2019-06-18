@@ -9,8 +9,8 @@ Ansible role to manage swapfile on Linux.
   tasks:
     - include_role:
         name: swapfile
-  vars:
-  # ...
+      vars:
+      # ...
 ```
   
 ### Available variables
